@@ -148,11 +148,10 @@
         .modal-content {
             background: var(--color-papel);
             border-radius: 15px;
-            /* CAMBIO CRUCIAL AQUÍ: Aumentamos el tamaño para mejor visualización de PDFs */
-            max-width: 90%; 
-            max-height: 90%;
-            width: 900px; /* Tamaño de referencia más grande */
-            height: 700px; /* Tamaño de referencia más grande */
+            /* **CAMBIO CRUCIAL PARA RESPONSIVIDAD:** Usamos vh/vw con un límite máximo. */
+            width: min(90vw, 900px); 
+            height: min(90vh, 700px);
+            /* Aseguramos que el contenido interno (header, body, iframe) pueda usar flexbox */
             display: flex;
             flex-direction: column;
             position: relative;
@@ -174,6 +173,7 @@
             align-items: center;
             font-family: 'Caveat', cursive;
             font-size: 2rem;
+            flex-shrink: 0; /* No permite que el header se achique */
         }
 
         .close-button {
@@ -188,14 +188,18 @@
 
         .modal-body {
             flex-grow: 1;
+            /* Ocupa todo el espacio restante del modal-content */
+            height: 100%; 
         }
 
         .pdf-iframe {
-            /* Con width/height 100% dentro de un modal-body grande, el PDF debe ajustarse y mostrar el scroll */
+            /* **CAMBIO CRUCIAL:** 100% del contenedor padre (modal-body) */
             width: 100%;
-            height: 100%;
+            height: 100%; 
             border: none;
             border-radius: 0 0 15px 15px;
+            /* Intentamos forzar el scroll, aunque el PDF viewer lo gestiona */
+            overflow: auto; 
         }
         
         /* --- ESTILOS PARA EL MODAL DE MENSAJES --- */
@@ -204,6 +208,8 @@
             height: auto;
             min-height: 150px;
             padding: 0;
+            max-width: 90vw; /* Responsividad para mensajes */
+            max-height: 90vh; /* Responsividad para mensajes */
         }
         #message-modal .modal-header {
             background-color: #EF4444; /* Rojo para error */
@@ -249,7 +255,7 @@
             text-align: justify;
         }
         
-        /* --- RESPONSIVE MOBILE --- */
+        /* --- RESPONSIVE MOBILE/TABLET --- */
         @media (max-width: 1250px) {
             :root {
                 --album-width: 95vw;
@@ -268,11 +274,6 @@
             .left-page {
                 border-right: none;
                 border-bottom: 2px solid rgba(0,0,0,0.1);
-            }
-            .modal-content {
-                /* Aseguramos que el modal siga siendo grande en móvil */
-                width: 95%;
-                height: 95%;
             }
             .menu-grid {
                 grid-template-columns: 1fr;
@@ -363,8 +364,9 @@
         
         // Rutas de archivos PDF - ESTAS SON LAS RUTAS CLAVE QUE DEBEN COINCIDIR CON LOS NOMBRES SUBIDOS
         const filePaths = {
-            'carta': 'Carta.pdf',
-            'checklist': 'Checklist.pdf'
+            // Usamos los nombres de archivo que aparecen en el historial
+            'carta': 'Carta.pdf', 
+            'checklist': 'Checklist.pdf' 
         };
         
         // --- DATA DE CONTENIDO (Mismo contenido de secciones) ---
