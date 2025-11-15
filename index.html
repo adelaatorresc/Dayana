@@ -294,17 +294,17 @@
         </div>
         
         <div class="page right-page flex flex-col" id="right-page-container">
-            <h2 id="right-title">Bienvenida a nuestro Álbum</h2>
+            <h2 id="right-title">Bienvenida a esta especie de Álbum</h2>
             <div id="right-content" class="page-content-scroll flex-grow flex items-start justify-center text-center text-lg p-4">
                 <p class="text-justify leading-relaxed">
                     ¡Bienvenida a este pequeño rincón de recuerdos, mi amor! 💙
                     <br><br>
-                    Este álbum está dividido en cuatro secciones (a la izquierda) que contienen las cosas más especiales que he preparado.
+                    Este álbum está dividido en cuatro secciones (a la izquierda o arriba).
                     <br><br>
-                    Pulsa cualquiera de los botones para ver la Carta, la Checklist de Sueños o los mensajes dedicados.
+                    Pulsa cualquiera de los botones para ver la Carta, la Checklist y más.
                     <br><br>
-                    Espero que lo disfrutes tanto como yo disfruté creándolo.
-                    <p class="signature text-4xl mt-10">Con todo mi amor,<br>Adela</p>
+                    Espero que lo disfrutes tanto como yo disfruté creándolo aunque no sea mucho.
+                    <p class="signature text-4xl mt-10">Te amo,<br>Adela</p>
                 </p>
             </div>
         </div>
@@ -364,13 +364,13 @@
                     <span class="menu-icon">💌</span>
                     <span>Abrir la Carta</span>
                 </div>
-                <div class="menu-button" onclick="openPdf('checklist', 'La Checklist de Sueños')">
+                <div class="menu-button" onclick="openPdf('checklist', 'La Checklist')">
                     <span class="menu-icon">✨</span>
                     <span>Abrir la Checklist</span>
                 </div>
                 <div class="menu-button" onclick="loadSection('songs')">
                     <span class="menu-icon">🎶</span>
-                    <span>Canciones Dedicadas</span>
+                    <span>Canciones que me recuerdan a ti</span>
                 </div>
                 <div class="menu-button" onclick="loadSection('me-enamore')">
                     <span class="menu-icon">💖</span>
@@ -409,7 +409,7 @@
         
         function showMenu() {
             leftTitle.textContent = 'Menú Principal';
-            rightTitle.textContent = 'Bienvenida a nuestro Álbum';
+            rightTitle.textContent = 'Bienvenida a esta especie de Álbum';
 
             // Contenido del menú en la izquierda
             leftPage.innerHTML = menuHtml;
@@ -419,12 +419,12 @@
                 <p class="text-justify leading-relaxed">
                     ¡Bienvenida a este pequeño rincón de recuerdos, mi amor! 💙
                     <br><br>
-                    Este álbum está dividido en cuatro secciones (a la izquierda) que contienen las cosas más especiales que he preparado.
+                    Este álbum está dividido en cuatro secciones (a la izquierda o arriba).
                     <br><br>
-                    Pulsa cualquiera de los botones para ver la Carta, la Checklist de Sueños o los mensajes dedicados.
+                    Pulsa cualquiera de los botones para ver la Carta, la Checklist y más.
                     <br><br>
-                    Espero que lo disfrutes tanto como yo disfruté creándolo.
-                    <p class="signature text-4xl mt-10">Con todo mi amor,<br>Adela</p>
+                    Espero que lo disfrutes tanto como yo disfruté creándolo aunque no sea mucho.
+                    <p class="signature text-4xl mt-10">Te amo,<br>Adela</p>
                 </p>
             `;
         }
@@ -442,8 +442,8 @@
 
 
             if (sectionName === 'songs') {
-                titleLeft = 'Canciones Dedicadas (I)';
-                titleRight = 'Canciones Dedicadas (II)';
+                titleLeft = 'Canciones que me recuerdan a ti (I)';
+                titleRight = 'Canciones que me recuerdan a ti (II)';
                 
                 const midPoint = Math.ceil(songsContent.length / 2);
                 const leftSongs = songsContent.slice(0, midPoint);
@@ -483,7 +483,7 @@
                     <div class="page-content-scroll flex items-center justify-center p-8 text-center h-full">
                         <div>
                             <span class="text-5xl mb-4 block" style="color: var(--color-principal);">🏡</span>
-                            <h3 class="text-2xl font-bold mb-4" style="color: var(--color-principal);">Sentirse "en Casa"</h3>
+                            <h3 class="text-2xl font-bold mb-4" style="color: var(--color-principal);">Hogar</h3>
                             <p class="text-lg mt-4 italic text-gray-600">
                                 Elegí este texto porque resume todo lo que siento por ti. Es un amor que me hizo sentir "en casa" cuando menos lo esperaba.
                             </p>
