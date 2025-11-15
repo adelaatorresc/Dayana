@@ -287,15 +287,12 @@
 
     <div class="album-container" id="album-container">
         
-        <!-- PÁGINA IZQUIERDA (Menú o Contenido principal de la sección) -->
         <div class="page left-page flex flex-col" id="left-page-container">
             <h2 id="left-title">Menú Principal</h2>
             <div id="left-content" class="page-content-scroll flex-grow flex items-center justify-center">
-                <!-- Aquí se carga el menú o el contenido de la sección -->
-            </div>
+                </div>
         </div>
         
-        <!-- PÁGINA DERECHA (Mensaje de Bienvenida o Contenido secundario) -->
         <div class="page right-page flex flex-col" id="right-page-container">
             <h2 id="right-title">Bienvenida a nuestro Álbum</h2>
             <div id="right-content" class="page-content-scroll flex-grow flex items-start justify-center text-center text-lg p-4">
@@ -314,7 +311,6 @@
 
     </div>
 
-    <!-- --- MODAL DE VISUALIZACIÓN DE PDF --- -->
     <div class="modal-overlay" id="pdf-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -324,13 +320,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- El iframe se actualizará dinámicamente -->
                 <iframe id="pdf-iframe" class="pdf-iframe" src="about:blank"></iframe>
             </div>
         </div>
     </div>
     
-    <!-- --- MODAL DE MENSAJES (Reemplaza alert()) --- -->
     <div class="modal-overlay" id="message-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -536,25 +530,23 @@
             
             let finalPath = null;
             
-            // --- INICIO DE LÓGICA DE RUTA ---
+            // LÓGICA DE RUTA PARA AMBOS ENTORNOS:
             if (typeof __app_file_access_paths !== 'undefined' && __app_file_access_paths[filename]) {
-                 // 1. Entorno Phoenix Code: Usamos la variable mágica para obtener la URL.
+                 // 1. Entorno Phoenix Code: Usamos la variable mágica (solo si estamos aquí).
                  finalPath = __app_file_access_paths[filename];
             } else {
-                 // 2. Entorno GitHub Pages/Local: Usamos la ruta relativa.
-                 // ¡Esto funciona si Carta.pdf y Checklist.pdf están en la misma carpeta que el HTML!
+                 // 2. Entorno GitHub Pages/Local: Usamos la ruta relativa (el nombre del archivo).
                  finalPath = filename;
             }
-            // --- FIN DE LÓGICA DE RUTA ---
             
             if (finalPath) {
                 pdfIframe.src = finalPath;
                 openModal();
             } else {
-                // Mensaje de fallback (este mensaje ya no debería salir en GitHub Pages si los archivos están al lado del HTML)
+                // Mensaje de fallback (solo si la lógica anterior no funciona)
                 showMessage('Error de Carga - Archivo No Encontrado', 
                     `No se pudo cargar el archivo "<strong>${filename}</strong>".
-                    <br><br><strong>Asegúrate:</strong> El archivo debe estar en la misma carpeta que el HTML y llamarse 
+                    <br><br><strong>Asegúrate:</strong> En GitHub, el archivo debe estar en la misma carpeta que el HTML y llamarse 
                     "<strong>${filename}</strong>" (¡mismo nombre exacto!)`, 
                     title
                 );
