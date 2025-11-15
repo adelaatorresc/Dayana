@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Dayi: Nuestro Álbum de Recuerdos</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* --- VARIABLES Y ESTILOS BASE (AZUL) --- */
+        :root {
+            --color-principal: #3A70B5; /* Azul marino/zafiro */
+            --color-secundo: #87C4FF; /* Azul celeste/suave */
+            --color-papel: #FFFDF7; /* Blanco roto (Fondo de página) */
+            --color-tinta: #3A4A5A; /* Tinta gris azulada */
+            
+            /* Dimensiones del álbum */
+            --album-width: 1200px;
+            --album-height: 750px;
+            --page-width: calc(var(--album-width) / 2); /* 600px por página */
+        }
+
+        body {
+            background-color: #f0f8ff; /* Fondo azul muy claro */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            color: var(--color-tinta);
+        }
+
+        /* --- CONTENEDOR PRINCIPAL DEL ÁLBUM (Doble página fija) --- */
+        .album-container {
+            width: var(--album-width);
+            height: var(--album-height);
+            position: relative;
+            display: flex; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: var(--color-papel); 
+        }
+
+        .page {
+            width: var(--page-width);
+            height: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .left-page { 
+            border-right: 2px solid rgba(0,0,0,0.1); 
+            background-color: #fafffe; /* Ligeramente más claro para el menú */
+        }
+        
+        /* --- ESTILOS DE FUENTE --- */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 6rem;
+            text-align: center;
+            color: var(--color-principal);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--color-principal);
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed var(--color-secundo);
+        }
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            text-align: right;
+            color: var(--color-principal);
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        /* --- MENU --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            padding: 0 10px;
+        }
+        .menu-button {
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Caveat', cursive;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            line-height: 1.2;
+        }
+
+        /* Estilos específicos para los botones */
+        .menu-button:nth-child(1) { background: linear-gradient(135deg, #60A5FA, #2563EB); } /* Carta - Azul Cielo */
+        .menu-button:nth-child(2) { background: linear-gradient(135deg, #34D399, #059669); } /* Checklist - Verde Menta */
+        .menu-button:nth-child(3) { background: linear-gradient(135deg, #FDBA74, #F97316); } /* Canciones - Naranja Suave */
+        .menu-button:nth-child(4) { background: linear-gradient(135deg, #A8B5FA, #6C55ED); } /* Me Enamoré - Morado Azulado */
+
+        .menu-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-icon { 
+            font-size: 2.5rem; 
+            margin-bottom: 5px; 
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+        }
+
+        /* --- VISOR MODAL PARA PDF (CARTA Y CHECKLIST) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: var(--color-papel);
+            border-radius: 15px;
+            max-width: 95%;
+            max-height: 95%;
+            width: 800px; 
+            height: 600px; 
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            animation: slideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px) scale(0.9); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--color-principal);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .close-button:hover { transform: rotate(180deg) scale(1.1); }
+
+        .modal-body {
+            flex-grow: 1;
+        }
+
+        .pdf-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        /* --- ESTILOS PARA EL MODAL DE MENSAJES --- */
+        #message-modal .modal-content {
+            width: 400px;
+            height: auto;
+            min-height: 150px;
+            padding: 0;
+        }
+        #message-modal .modal-header {
+            background-color: #EF4444; /* Rojo para error */
+        }
+        #message-modal .modal-body {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--color-tinta);
+        }
+
+        /* --- CONTENIDO DE SECCIONES --- */
+        .page-content-scroll {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .song-item {
+            margin-bottom: 20px;
+            padding-left: 10px;
+            border-left: 4px solid var(--color-secundo);
+        }
+        .song-title {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--color-principal);
+            line-height: 1.2;
+            margin-bottom: 3px;
+            font-weight: 700;
+        }
+        .song-reason {
+            font-size: 1rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        .text-extra-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        /* --- RESPONSIVE MOBILE --- */
+        @media (max-width: 1250px) {
+            :root {
+                --album-width: 95vw;
+                --album-height: 90vh;
+            }
+            .album-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 90vh;
+            }
+            .page {
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+            .left-page {
+                border-right: none;
+                border-bottom: 2px solid rgba(0,0,0,0.1);
+            }
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .menu-button {
+                height: 100px;
+                font-size: 1.2rem;
+            }
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2.5rem; }
+            .modal-content {
+                width: 95%;
+                height: 95%;
+            }
+        }
+    </style>
+</head>
+<body onload="showMenu()">
+
+    <div class="album-container" id="album-container">
+        
+        <!-- PÁGINA IZQUIERDA (Menú o Contenido principal de la sección) -->
+        <div class="page left-page flex flex-col" id="left-page-container">
+            <h2 id="left-title">Menú Principal</h2>
+            <div id="left-content" class="page-content-scroll flex-grow flex items-center justify-center">
+                <!-- Aquí se carga el menú o el contenido de la sección -->
+            </div>
+        </div>
+        
+        <!-- PÁGINA DERECHA (Mensaje de Bienvenida o Contenido secundario) -->
+        <div class="page right-page flex flex-col" id="right-page-container">
+            <h2 id="right-title">Bienvenida a nuestro Álbum</h2>
+            <div id="right-content" class="page-content-scroll flex-grow flex items-start justify-center text-center text-lg p-4">
+                <p class="text-justify leading-relaxed">
+                    ¡Bienvenida a este pequeño rincón de recuerdos, mi amor! 💙
+                    <br><br>
+                    Este álbum está dividido en cuatro secciones (a la izquierda) que contienen las cosas más especiales que he preparado.
+                    <br><br>
+                    Pulsa cualquiera de los botones para ver la Carta, la Checklist de Sueños o los mensajes dedicados.
+                    <br><br>
+                    Espero que lo disfrutes tanto como yo disfruté creándolo.
+                    <p class="signature text-4xl mt-10">Con todo mi amor,<br>Adela</p>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- --- MODAL DE VISUALIZACIÓN DE PDF --- -->
+    <div class="modal-overlay" id="pdf-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modal-title">Documento</span>
+                <button class="close-button" onclick="closeModal()">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- El iframe se actualizará dinámicamente -->
+                <iframe id="pdf-iframe" class="pdf-iframe" src="about:blank"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- --- MODAL DE MENSAJES (Reemplaza alert()) --- -->
+    <div class="modal-overlay" id="message-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="msg-modal-title">Mensaje</span>
+                <button class="close-button" onclick="closeMessageModal()">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="msg-modal-text">Contenido del mensaje aquí.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos del DOM
+        const leftPage = document.getElementById('left-content');
+        const leftTitle = document.getElementById('left-title');
+        const rightPage = document.getElementById('right-content');
+        const rightTitle = document.getElementById('right-title');
+        
+        // Modal elements
+        const pdfModal = document.getElementById('pdf-modal');
+        const pdfIframe = document.getElementById('pdf-iframe');
+        const modalTitle = document.getElementById('modal-title');
+        
+        // Rutas de archivos PDF - ESTAS SON LAS RUTAS CLAVE QUE DEBEN COINCIDIR CON LOS NOMBRES SUBIDOS
+        const filePaths = {
+            'carta': 'Carta.pdf',
+            'checklist': 'Checklist.pdf'
+        };
+        
+        // --- DATA DE CONTENIDO ---
+        const menuHtml = `
+            <div class="menu-grid">
+                <div class="menu-button" onclick="openPdf('carta', 'Nuestra Carta')">
+                    <span class="menu-icon">💌</span>
+                    <span>Abrir la Carta</span>
+                </div>
+                <div class="menu-button" onclick="openPdf('checklist', 'La Checklist de Sueños')">
+                    <span class="menu-icon">✨</span>
+                    <span>Abrir la Checklist</span>
+                </div>
+                <div class="menu-button" onclick="loadSection('songs')">
+                    <span class="menu-icon">🎶</span>
+                    <span>Canciones Dedicadas</span>
+                </div>
+                <div class="menu-button" onclick="loadSection('me-enamore')">
+                    <span class="menu-icon">💖</span>
+                    <span>Me Enamoré de Ti</span>
+                </div>
+            </div>
+        `;
+        
+        const songsContent = [
+            { title: '“Ay si te pillara” – Beéle', reason: 'Porque te encanta Beéle, y cada vez que escucho esta canción me acuerdo de eso. Además, tiene como esa energía tuya, que me recuerda mucho a ti.' },
+            { title: '“La plena (W Sound 05)” – Beéle', reason: 'Porque me recuerda a tu forma de disfrutar las cosas sin darle tantas vueltas.' },
+            { title: '“Blue” – Joshua Bassett', reason: 'Porque habla de cómo alguien llega cuando menos lo esperas. “Out of the blue, I fell for you.” Y sí, fue un poco así contigo.' },
+            { title: '“Primeras veces” – Morat', reason: 'Porque contigo todo se siente nuevo, incluso lo de siempre. Me recuerda a ti porque haces que cualquier cosa, por mínima que sea, tenga algo especial.' },
+            { title: '“Al aire” – Morat', reason: 'Porque habla de estar enamorada y no poder ocultarlo. Me recuerda a ti porque, aunque no lo diga todo, hay cosas que simplemente se notan.' },
+            { title: '“Batmovil (Remix)” – Hens, Pole, Funzo & Baby Loud', reason: 'Porque dice que si me llamas, dejo solo a “Robin” por ir contigo. Y sinceramente, no sé si hay frase que lo resuma mejor.' },
+            { title: '“Stargazing” – Myles Smith', reason: 'Porque habla de una alguien que simplemente está ahí, mirando las estrellas junto a ti. Sin más, sin líos. Solo eso, y ya es suficiente.' },
+            { title: '“Tú vas sin” – Rels B', reason: 'Porque vas a tu rollo, sin copiar a nadie. Me recuerda a ti porque eres así: auténtica, sin esforzarte en serlo.' },
+            { title: '“La vida sin ti” – Rels B', reason: 'Porque, sin querer sonar dramática, todo tiene menos sentido si no estás tú. Simple y claro.' }
+        ];
+
+        const meEnamoreText = `
+            <div class="text-extra-content">
+                <p>Me enamoré de ti por la forma en que miras el mundo, incluso cuando todo parece gris. Por cómo haces que las cosas pequeñas tengan sentido, por cómo transformas lo cotidiano en algo especial sin darte cuenta.</p>
+                <p>Me enamoré de tu forma de hablar, de tu voz cuando se te escapa una risa, de cómo puedes decir tanto incluso cuando callas.</p>
+                <p>Me enamoré porque contigo no tuve que esconderme. Porque me miraste y me viste entera, sin adornos, sin filtros, sin miedo.</p>
+                <p>Porque contigo aprendí que amar no es depender, sino confiar. Que cuidar no es invadir, sino acompañar.</p>
+                <p>Amo tus rarezas, tus silencios, tus gestos, tus bromas.</p>
+                <p>Amo cómo brillas sin darte cuenta, cómo llenas el aire con tu energía, y cómo haces que todo tenga un poco más de sentido cuando estás.</p>
+                <p>Amo la paz que me das incluso cuando no estás cerca. Amo cómo te quedas en mis pensamientos, cómo apareces sin avisar y aun así siempre eres bienvenida.</p>
+                <p>Y sobre todo, amo que seas tú.</p>
+                <p class="text-center font-bold text-lg mt-6" style="color: var(--color-principal);">Así, con tus miedos, tus risas, tus tonterías y tu manera única de ser. Porque no hay nadie más que me haya hecho sentir tan viva, tan yo, tan en casa.</p>
+            </div>
+        `;
+
+        // --- FUNCIONES DE NAVEGACIÓN DEL LIBRO ---
+        
+        function showMenu() {
+            leftTitle.textContent = 'Menú Principal';
+            rightTitle.textContent = 'Bienvenida a nuestro Álbum';
+
+            // Contenido del menú en la izquierda
+            leftPage.innerHTML = menuHtml;
+
+            // Contenido de bienvenida en la derecha
+            rightPage.innerHTML = `
+                <p class="text-justify leading-relaxed">
+                    ¡Bienvenida a este pequeño rincón de recuerdos, mi amor! 💙
+                    <br><br>
+                    Este álbum está dividido en cuatro secciones (a la izquierda) que contienen las cosas más especiales que he preparado.
+                    <br><br>
+                    Pulsa cualquiera de los botones para ver la Carta, la Checklist de Sueños o los mensajes dedicados.
+                    <br><br>
+                    Espero que lo disfrutes tanto como yo disfruté creándolo.
+                    <p class="signature text-4xl mt-10">Con todo mi amor,<br>Adela</p>
+                </p>
+            `;
+        }
+        
+        function loadSection(sectionName) {
+            let contentHtmlLeft = '';
+            let contentHtmlRight = '';
+            let titleLeft = '';
+            let titleRight = '';
+
+            // Botón de Volver para las secciones que reemplazan el menú
+            const backButton = `<button class="w-full text-center text-lg mt-4 px-4 py-2 border-2 border-dashed border-gray-400 text-gray-600 hover:bg-gray-100 rounded-lg transition" onclick="showMenu()">
+                                    &#9664; Volver al Menú
+                                </button>`;
+
+
+            if (sectionName === 'songs') {
+                titleLeft = 'Canciones Dedicadas (I)';
+                titleRight = 'Canciones Dedicadas (II)';
+                
+                const midPoint = Math.ceil(songsContent.length / 2);
+                const leftSongs = songsContent.slice(0, midPoint);
+                const rightSongs = songsContent.slice(midPoint);
+
+                const generateSongHtml = (list) => list.map(song => `
+                    <div class="song-item">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-reason">${song.reason}</div>
+                    </div>
+                `).join('');
+
+                contentHtmlLeft = `
+                    <div class="page-content-scroll">
+                        ${generateSongHtml(leftSongs)}
+                    </div>
+                `;
+                contentHtmlRight = `
+                    <div class="page-content-scroll">
+                        ${generateSongHtml(rightSongs)}
+                        ${backButton}
+                    </div>
+                `;
+
+            } else if (sectionName === 'me-enamore') {
+                titleLeft = 'Me Enamoré de Ti';
+                titleRight = 'Un Sentimiento Sincero';
+
+                contentHtmlLeft = `
+                    <div class="page-content-scroll">
+                        ${meEnamoreText}
+                        ${backButton}
+                    </div>
+                `;
+
+                contentHtmlRight = `
+                    <div class="page-content-scroll flex items-center justify-center p-8 text-center h-full">
+                        <div>
+                            <span class="text-5xl mb-4 block" style="color: var(--color-principal);">🏡</span>
+                            <h3 class="text-2xl font-bold mb-4" style="color: var(--color-principal);">Sentirse "en Casa"</h3>
+                            <p class="text-lg mt-4 italic text-gray-600">
+                                Elegí este texto porque resume todo lo que siento por ti. Es un amor que me hizo sentir "en casa" cuando menos lo esperaba.
+                            </p>
+                            <p class="signature text-3xl mt-10">Gracias por ser mi lugar seguro.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            leftTitle.textContent = titleLeft;
+            rightTitle.textContent = titleRight;
+            leftPage.innerHTML = contentHtmlLeft;
+            rightPage.innerHTML = contentHtmlRight;
+        }
+        
+        // --- FUNCIONES DE MODAL PDF ---
+
+        function openModal() {
+            pdfModal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            pdfModal.style.display = 'none';
+            pdfIframe.src = 'about:blank'; // Limpiar la fuente
+            modalTitle.textContent = 'Documento';
+        }
+
+        // --- FUNCIONES DE MODAL MENSAJE PERSONALIZADO (Reemplaza alert()) ---
+        function showMessage(title, message) {
+            document.getElementById('msg-modal-title').textContent = title;
+            document.getElementById('msg-modal-text').innerHTML = message;
+            document.getElementById('message-modal').style.display = 'flex';
+        }
+
+        function closeMessageModal() {
+            document.getElementById('message-modal').style.display = 'none';
+        }
+        
+        // --- FUNCIÓN PRINCIPAL CORREGIDA PARA ABRIR PDF ---
+        function openPdf(type, title) {
+            // Usamos los nombres de archivo simples que has asignado: Carta.pdf o Checklist.pdf
+            const filename = filePaths[type]; 
+
+            if (!filename) {
+                showMessage('Error de Ruta', 'Lo siento, la ruta del archivo PDF no se encontró en la configuración interna.');
+                return;
+            }
+
+            modalTitle.textContent = title;
+            
+            let finalPath = null;
+            
+            try {
+                // El mapa de acceso a archivos (__app_file_access_paths) usa el nombre del archivo para buscar la URL.
+                // Esta es la variable mágica que funciona en este entorno (Phoenix Code)
+                if (typeof __app_file_access_paths !== 'undefined' && __app_file_access_paths[filename]) {
+                     // Asignar la ruta de acceso proporcionada por la plataforma
+                     finalPath = __app_file_access_paths[filename];
+                } else {
+                    // Si no se encuentra, mostramos qué nombre estamos buscando.
+                    console.error(`Error: Archivo no encontrado en el mapa de acceso: ${filename}`);
+                }
+            } catch (e) {
+                // Si la variable __app_file_access_paths no está definida (entorno local).
+                console.error("Error: Variable de acceso a archivos no definida.", e);
+            }
+
+            if (finalPath) {
+                pdfIframe.src = finalPath;
+                openModal();
+            } else {
+                // Usar el modal de mensajes en lugar de alert() si falla la carga
+                showMessage('Error de Carga - Archivo No Encontrado', 
+                    `No se pudo cargar el archivo "<strong>${filename}</strong>".
+                    <br><br><strong>Asegúrate:</strong> El archivo debe estar subido a la plataforma y llamarse 
+                    "<strong>${filename}</strong>" (¡mismo nombre exacto!)`, 
+                    title
+                );
+                closeModal();
+            }
+        }
+        
+        // Cierre del modal de PDF al hacer clic fuera
+        pdfModal.addEventListener('click', (e) => {
+            if (e.target === pdfModal) {
+                closeModal();
+            }
+        });
+        
+        // Cierre del modal de Mensajes al hacer clic fuera
+        document.getElementById('message-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('message-modal')) {
+                closeMessageModal();
+            }
+        });
+        
+    </script>
+</body>
+</html>
