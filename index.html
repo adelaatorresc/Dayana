@@ -148,10 +148,11 @@
         .modal-content {
             background: var(--color-papel);
             border-radius: 15px;
-            max-width: 95%;
-            max-height: 95%;
-            width: 800px; 
-            height: 600px; 
+            /* CAMBIO CRUCIAL AQUÍ: Aumentamos el tamaño para mejor visualización de PDFs */
+            max-width: 90%; 
+            max-height: 90%;
+            width: 900px; /* Tamaño de referencia más grande */
+            height: 700px; /* Tamaño de referencia más grande */
             display: flex;
             flex-direction: column;
             position: relative;
@@ -190,6 +191,7 @@
         }
 
         .pdf-iframe {
+            /* Con width/height 100% dentro de un modal-body grande, el PDF debe ajustarse y mostrar el scroll */
             width: 100%;
             height: 100%;
             border: none;
@@ -267,6 +269,11 @@
                 border-right: none;
                 border-bottom: 2px solid rgba(0,0,0,0.1);
             }
+            .modal-content {
+                /* Aseguramos que el modal siga siendo grande en móvil */
+                width: 95%;
+                height: 95%;
+            }
             .menu-grid {
                 grid-template-columns: 1fr;
             }
@@ -276,10 +283,7 @@
             }
             h1 { font-size: 4rem; }
             h2 { font-size: 2.5rem; }
-            .modal-content {
-                width: 95%;
-                height: 95%;
-            }
+
         }
     </style>
 </head>
@@ -287,12 +291,15 @@
 
     <div class="album-container" id="album-container">
         
+        <!-- PÁGINA IZQUIERDA (Menú o Contenido principal de la sección) -->
         <div class="page left-page flex flex-col" id="left-page-container">
             <h2 id="left-title">Menú Principal</h2>
             <div id="left-content" class="page-content-scroll flex-grow flex items-center justify-center">
-                </div>
+                <!-- Aquí se carga el menú o el contenido de la sección -->
+            </div>
         </div>
         
+        <!-- PÁGINA DERECHA (Mensaje de Bienvenida o Contenido secundario) -->
         <div class="page right-page flex flex-col" id="right-page-container">
             <h2 id="right-title">Bienvenida a nuestro Álbum</h2>
             <div id="right-content" class="page-content-scroll flex-grow flex items-start justify-center text-center text-lg p-4">
@@ -311,6 +318,7 @@
 
     </div>
 
+    <!-- --- MODAL DE VISUALIZACIÓN DE PDF --- -->
     <div class="modal-overlay" id="pdf-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -320,11 +328,13 @@
                 </button>
             </div>
             <div class="modal-body">
+                <!-- El iframe se actualizará dinámicamente -->
                 <iframe id="pdf-iframe" class="pdf-iframe" src="about:blank"></iframe>
             </div>
         </div>
     </div>
     
+    <!-- --- MODAL DE MENSAJES (Reemplaza alert()) --- -->
     <div class="modal-overlay" id="message-modal">
         <div class="modal-content">
             <div class="modal-header">
