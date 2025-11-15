@@ -363,7 +363,7 @@
             'checklist': 'Checklist.pdf'
         };
         
-        // --- DATA DE CONTENIDO ---
+        // --- DATA DE CONTENIDO (Mismo contenido de secciones) ---
         const menuHtml = `
             <div class="menu-grid">
                 <div class="menu-button" onclick="openPdf('carta', 'Nuestra Carta')">
@@ -528,43 +528,33 @@
             document.getElementById('message-modal').style.display = 'none';
         }
         
-        // --- FUNCIÓN PRINCIPAL CORREGIDA PARA ABRIR PDF ---
+        // --- FUNCIÓN PRINCIPAL CORREGIDA PARA ABRIR PDF (Versión compatible con GitHub Pages) ---
         function openPdf(type, title) {
-            // Usamos los nombres de archivo simples que has asignado: Carta.pdf o Checklist.pdf
+            // Usamos los nombres de archivo simples: Carta.pdf o Checklist.pdf
             const filename = filePaths[type]; 
-
-            if (!filename) {
-                showMessage('Error de Ruta', 'Lo siento, la ruta del archivo PDF no se encontró en la configuración interna.');
-                return;
-            }
-
             modalTitle.textContent = title;
             
             let finalPath = null;
             
-            try {
-                // El mapa de acceso a archivos (__app_file_access_paths) usa el nombre del archivo para buscar la URL.
-                // Esta es la variable mágica que funciona en este entorno (Phoenix Code)
-                if (typeof __app_file_access_paths !== 'undefined' && __app_file_access_paths[filename]) {
-                     // Asignar la ruta de acceso proporcionada por la plataforma
-                     finalPath = __app_file_access_paths[filename];
-                } else {
-                    // Si no se encuentra, mostramos qué nombre estamos buscando.
-                    console.error(`Error: Archivo no encontrado en el mapa de acceso: ${filename}`);
-                }
-            } catch (e) {
-                // Si la variable __app_file_access_paths no está definida (entorno local).
-                console.error("Error: Variable de acceso a archivos no definida.", e);
+            // --- INICIO DE LÓGICA DE RUTA ---
+            if (typeof __app_file_access_paths !== 'undefined' && __app_file_access_paths[filename]) {
+                 // 1. Entorno Phoenix Code: Usamos la variable mágica para obtener la URL.
+                 finalPath = __app_file_access_paths[filename];
+            } else {
+                 // 2. Entorno GitHub Pages/Local: Usamos la ruta relativa.
+                 // ¡Esto funciona si Carta.pdf y Checklist.pdf están en la misma carpeta que el HTML!
+                 finalPath = filename;
             }
-
+            // --- FIN DE LÓGICA DE RUTA ---
+            
             if (finalPath) {
                 pdfIframe.src = finalPath;
                 openModal();
             } else {
-                // Usar el modal de mensajes en lugar de alert() si falla la carga
+                // Mensaje de fallback (este mensaje ya no debería salir en GitHub Pages si los archivos están al lado del HTML)
                 showMessage('Error de Carga - Archivo No Encontrado', 
                     `No se pudo cargar el archivo "<strong>${filename}</strong>".
-                    <br><br><strong>Asegúrate:</strong> El archivo debe estar subido a la plataforma y llamarse 
+                    <br><br><strong>Asegúrate:</strong> El archivo debe estar en la misma carpeta que el HTML y llamarse 
                     "<strong>${filename}</strong>" (¡mismo nombre exacto!)`, 
                     title
                 );
