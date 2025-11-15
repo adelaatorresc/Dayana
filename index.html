@@ -138,9 +138,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
+            display: block; /* Importante para el centrado fijo */
             z-index: 1000;
             backdrop-filter: blur(8px);
         }
@@ -148,19 +146,24 @@
         .modal-content {
             background: var(--color-papel);
             border-radius: 15px;
-            max-width: 95%;
-            max-height: 95%;
-            width: 800px; 
-            height: 600px; 
+            /* Centrado absoluto/fijo para máxima fiabilidad en todos los dispositivos */
+            position: fixed; 
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); 
+
+            /* Dimensiones */
+            width: min(90vw, 900px); 
+            height: min(90vh, 700px);
+            
             display: flex;
             flex-direction: column;
-            position: relative;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
             animation: slideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         @keyframes slideIn {
-            from { transform: translateY(-50px) scale(0.9); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
+            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .modal-header {
@@ -173,6 +176,7 @@
             align-items: center;
             font-family: 'Caveat', cursive;
             font-size: 2rem;
+            flex-shrink: 0; 
         }
 
         .close-button {
@@ -187,21 +191,29 @@
 
         .modal-body {
             flex-grow: 1;
+            /* CRUCIAL FIX para el scroll del iframe en flexbox */
+            min-height: 0; 
+            overflow: auto; /* Permite el scroll del cuerpo del modal si el PDF no lo hace */
         }
 
         .pdf-iframe {
+            /* 100% de la altura disponible, forzando al visor PDF a mostrar su scroll si es necesario */
             width: 100%;
-            height: 100%;
+            height: 100%; 
             border: none;
             border-radius: 0 0 15px 15px;
+            display: block;
         }
         
         /* --- ESTILOS PARA EL MODAL DE MENSAJES --- */
         #message-modal .modal-content {
+            /* Sobreescribir el centrado fijo para el modal de mensajes si es necesario */
             width: 400px;
             height: auto;
             min-height: 150px;
             padding: 0;
+            max-width: 90vw; 
+            max-height: 90vh; 
         }
         #message-modal .modal-header {
             background-color: #EF4444; /* Rojo para error */
@@ -247,7 +259,7 @@
             text-align: justify;
         }
         
-        /* --- RESPONSIVE MOBILE --- */
+        /* --- RESPONSIVE MOBILE/TABLET --- */
         @media (max-width: 1250px) {
             :root {
                 --album-width: 95vw;
@@ -276,10 +288,7 @@
             }
             h1 { font-size: 4rem; }
             h2 { font-size: 2.5rem; }
-            .modal-content {
-                width: 95%;
-                height: 95%;
-            }
+
         }
     </style>
 </head>
@@ -359,11 +368,12 @@
         
         // Rutas de archivos PDF - ESTAS SON LAS RUTAS CLAVE QUE DEBEN COINCIDIR CON LOS NOMBRES SUBIDOS
         const filePaths = {
-            'carta': 'Carta.pdf',
-            'checklist': 'Checklist.pdf'
+            // Usamos los nombres de archivo que aparecen en el historial
+            'carta': 'Carta.pdf', 
+            'checklist': 'Checklist.pdf' 
         };
         
-        // --- DATA DE CONTENIDO ---
+        // --- DATA DE CONTENIDO (Mismo contenido de secciones) ---
         const menuHtml = `
             <div class="menu-grid">
                 <div class="menu-button" onclick="openPdf('carta', 'Nuestra Carta')">
@@ -508,7 +518,7 @@
         // --- FUNCIONES DE MODAL PDF ---
 
         function openModal() {
-            pdfModal.style.display = 'flex';
+            pdfModal.style.display = 'block'; // Usamos block ya que el contenido se centra con position: fixed
         }
 
         function closeModal() {
@@ -521,50 +531,38 @@
         function showMessage(title, message) {
             document.getElementById('msg-modal-title').textContent = title;
             document.getElementById('msg-modal-text').innerHTML = message;
-            document.getElementById('message-modal').style.display = 'flex';
+            document.getElementById('message-modal').style.display = 'block';
         }
 
         function closeMessageModal() {
             document.getElementById('message-modal').style.display = 'none';
         }
         
-        // --- FUNCIÓN PRINCIPAL CORREGIDA PARA ABRIR PDF ---
+        // --- FUNCIÓN PRINCIPAL CORREGIDA PARA ABRIR PDF (Versión compatible con GitHub Pages) ---
         function openPdf(type, title) {
-            // Usamos los nombres de archivo simples que has asignado: Carta.pdf o Checklist.pdf
+            // Usamos los nombres de archivo simples: Carta.pdf o Checklist.pdf
             const filename = filePaths[type]; 
-
-            if (!filename) {
-                showMessage('Error de Ruta', 'Lo siento, la ruta del archivo PDF no se encontró en la configuración interna.');
-                return;
-            }
-
             modalTitle.textContent = title;
             
             let finalPath = null;
             
-            try {
-                // El mapa de acceso a archivos (__app_file_access_paths) usa el nombre del archivo para buscar la URL.
-                // Esta es la variable mágica que funciona en este entorno (Phoenix Code)
-                if (typeof __app_file_access_paths !== 'undefined' && __app_file_access_paths[filename]) {
-                     // Asignar la ruta de acceso proporcionada por la plataforma
-                     finalPath = __app_file_access_paths[filename];
-                } else {
-                    // Si no se encuentra, mostramos qué nombre estamos buscando.
-                    console.error(`Error: Archivo no encontrado en el mapa de acceso: ${filename}`);
-                }
-            } catch (e) {
-                // Si la variable __app_file_access_paths no está definida (entorno local).
-                console.error("Error: Variable de acceso a archivos no definida.", e);
+            // LÓGICA DE RUTA PARA AMBOS ENTORNOS:
+            if (typeof __app_file_access_paths !== 'undefined' && __app_file_access_paths[filename]) {
+                 // 1. Entorno Phoenix Code: Usamos la variable mágica (solo si estamos aquí).
+                 finalPath = __app_file_access_paths[filename];
+            } else {
+                 // 2. Entorno GitHub Pages/Local: Usamos la ruta relativa (el nombre del archivo).
+                 finalPath = filename;
             }
-
+            
             if (finalPath) {
                 pdfIframe.src = finalPath;
                 openModal();
             } else {
-                // Usar el modal de mensajes en lugar de alert() si falla la carga
+                // Mensaje de fallback (solo si la lógica anterior no funciona)
                 showMessage('Error de Carga - Archivo No Encontrado', 
                     `No se pudo cargar el archivo "<strong>${filename}</strong>".
-                    <br><br><strong>Asegúrate:</strong> El archivo debe estar subido a la plataforma y llamarse 
+                    <br><br><strong>Asegúrate:</strong> En GitHub, el archivo debe estar en la misma carpeta que el HTML y llamarse 
                     "<strong>${filename}</strong>" (¡mismo nombre exacto!)`, 
                     title
                 );
@@ -574,14 +572,15 @@
         
         // Cierre del modal de PDF al hacer clic fuera
         pdfModal.addEventListener('click', (e) => {
-            if (e.target === pdfModal) {
+            // Comprobamos si el clic fue en el fondo (overlay), no en el contenido (modal-content)
+            if (e.target.id === 'pdf-modal') {
                 closeModal();
             }
         });
         
         // Cierre del modal de Mensajes al hacer clic fuera
         document.getElementById('message-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('message-modal')) {
+            if (e.target.id === 'message-modal') {
                 closeMessageModal();
             }
         });
