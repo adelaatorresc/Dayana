@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Dayi: Nuestro Álbum de Recuerdos</title>
+    <title>Para Dayi: Álbum de cumpleaños</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* --- VARIABLES Y ESTILOS BASE (AZUL) --- */
+        /* --- VARIABLES Y ESTILOS BASE (AZUL CÁLIDO) --- */
         :root {
-            --color-principal: #3A70B5; /* Azul marino/zafiro */
-            --color-secundo: #87C4FF; /* Azul celeste/suave */
-            --color-papel: #FFFDF7; /* Blanco roto (Fondo de página) */
-            --color-tinta: #3A4A5A; /* Tinta gris azulada */
+            --color-principal: #1e40af; /* Azul profundo */
+            --color-secundo: #3b82f6; /* Azul vibrante */
+            --color-suave: #60a5fa; /* Azul suave */
+            --color-muy-suave: #93c5fd; /* Azul muy suave */
+            --color-dorado: #fbbf24; /* Dorado cálido para acentos */
+            --color-papel: #fef7ed; /* Blanco cálido con tono crema */
+            --color-tinta: #374151; /* Gris suave para texto */
             
             /* Dimensiones del álbum */
             --album-width: 1200px;
@@ -23,7 +26,7 @@
         }
 
         body {
-            background-color: #f0f8ff; /* Fondo azul muy claro */
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -31,6 +34,7 @@
             padding: 20px;
             font-family: 'Inter', sans-serif;
             color: var(--color-tinta);
+            scroll-behavior: smooth;
         }
 
         /* --- CONTENEDOR PRINCIPAL DEL ÁLBUM (Doble página fija) --- */
@@ -39,95 +43,157 @@
             height: var(--album-height);
             position: relative;
             display: flex; 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-            border-radius: 15px;
+            box-shadow: 
+                0 25px 60px rgba(30, 64, 175, 0.15),
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
             overflow: hidden;
-            background-color: var(--color-papel); 
+            background-color: var(--color-papel);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+                linear-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .page {
             width: var(--page-width);
             height: 100%;
-            padding: 40px;
+            padding: 50px 40px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         
         .left-page { 
-            border-right: 2px solid rgba(0,0,0,0.1); 
-            background-color: #fafffe; /* Ligeramente más claro para el menú */
+            border-right: 1px solid rgba(59, 130, 246, 0.2); 
+            background: linear-gradient(135deg, #fef7ed 0%, #fefbf6 100%);
         }
         
         /* --- ESTILOS DE FUENTE --- */
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 6rem;
+            font-size: 5.5rem;
             text-align: center;
-            color: var(--color-principal);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--color-principal), var(--color-secundo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            letter-spacing: -1px;
         }
         h2 {
             font-family: 'Dancing Script', cursive;
             color: var(--color-principal);
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px dashed var(--color-secundo);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 25%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-dorado), transparent);
         }
         .signature {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             text-align: right;
             color: var(--color-principal);
-            margin-top: 30px;
+            margin-top: 40px;
             width: 100%;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         /* --- MENU --- */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 25px;
             width: 100%;
-            padding: 0 10px;
+            padding: 0 15px;
         }
         .menu-button {
-            height: 150px;
+            height: 160px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 15px;
-            font-size: 1.3rem;
+            padding: 20px;
+            font-size: 1.4rem;
             font-weight: 700;
             font-family: 'Caveat', cursive;
             color: white;
-            border-radius: 12px;
+            border-radius: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            line-height: 1.2;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 
+                0 8px 20px rgba(30, 64, 175, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            line-height: 1.3;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Estilos específicos para los botones */
-        .menu-button:nth-child(1) { background: linear-gradient(135deg, #60A5FA, #2563EB); } /* Carta - Azul Cielo */
-        .menu-button:nth-child(2) { background: linear-gradient(135deg, #34D399, #059669); } /* Checklist - Verde Menta */
-        .menu-button:nth-child(3) { background: linear-gradient(135deg, #FDBA74, #F97316); } /* Canciones - Naranja Suave */
-        .menu-button:nth-child(4) { background: linear-gradient(135deg, #A8B5FA, #6C55ED); } /* Me Enamoré - Morado Azulado */
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .menu-button:hover::before {
+            left: 100%;
+        }
+
+        /* TODOS LOS BOTONES EN AZULES BONITOS CON EFECTOS */
+        .menu-button:nth-child(1) { 
+            background: linear-gradient(135deg, var(--color-suave), var(--color-principal)); 
+        }
+        .menu-button:nth-child(2) { 
+            background: linear-gradient(135deg, var(--color-muy-suave), var(--color-secundo)); 
+        }
+        .menu-button:nth-child(3) { 
+            background: linear-gradient(135deg, var(--color-suave), var(--color-principal)); 
+        }
+        .menu-button:nth-child(4) { 
+            background: linear-gradient(135deg, var(--color-muy-suave), var(--color-secundo)); 
+        }
 
         .menu-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 
+                0 15px 30px rgba(30, 64, 175, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .menu-icon { 
-            font-size: 2.5rem; 
-            margin-bottom: 5px; 
-            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+            font-size: 3rem; 
+            margin-bottom: 8px; 
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .menu-button:hover .menu-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
         /* --- VISOR MODAL PARA PDF (CARTA Y CHECKLIST) --- */
@@ -137,114 +203,338 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
         }
 
         .modal-content {
             background: var(--color-papel);
-            border-radius: 15px;
+            border-radius: 20px;
             max-width: 95%;
             max-height: 95%;
-            width: 800px; 
-            height: 600px; 
+            width: 850px; 
+            height: 650px; 
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-            animation: slideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            animation: gentleAppear 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        @keyframes slideIn {
-            from { transform: translateY(-50px) scale(0.9); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes gentleAppear {
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         .modal-header {
-            padding: 15px 20px;
-            background-color: var(--color-principal);
+            padding: 20px 25px;
+            background: linear-gradient(135deg, var(--color-secundo), var(--color-principal));
             color: white;
-            border-radius: 15px 15px 0 0;
+            border-radius: 20px 20px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-family: 'Caveat', cursive;
-            font-size: 2rem;
+            font-size: 2.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .close-button {
             background: none;
             border: none;
             color: white;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
-        .close-button:hover { transform: rotate(180deg) scale(1.1); }
+        .close-button:hover { 
+            transform: rotate(90deg) scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+        }
 
         .modal-body {
             flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            background: radial-gradient(circle at center, rgba(251, 191, 36, 0.02) 0%, transparent 70%);
         }
 
         .pdf-iframe {
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 0 0 15px 15px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
         
         /* --- ESTILOS PARA EL MODAL DE MENSAJES --- */
         #message-modal .modal-content {
-            width: 400px;
+            width: 450px;
             height: auto;
-            min-height: 150px;
+            min-height: 180px;
             padding: 0;
+            animation: gentleAppear 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
+        
         #message-modal .modal-header {
-            background-color: #EF4444; /* Rojo para error */
+            background: linear-gradient(135deg, var(--color-secundo), var(--color-principal));
         }
         #message-modal .modal-body {
-            padding: 20px;
+            padding: 30px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--color-tinta);
+            line-height: 1.6;
         }
 
         /* --- CONTENIDO DE SECCIONES --- */
         .page-content-scroll {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px 20px;
             font-family: 'Inter', sans-serif;
-            font-size: 1.1rem;
-            line-height: 1.6;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            scroll-behavior: smooth;
         }
         
         .song-item {
-            margin-bottom: 20px;
-            padding-left: 10px;
-            border-left: 4px solid var(--color-secundo);
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            border-left: 5px solid var(--color-suave);
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.05), transparent);
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s ease;
         }
+        
+        .song-item:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), transparent);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .song-title {
             font-family: 'Caveat', cursive;
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             color: var(--color-principal);
-            line-height: 1.2;
-            margin-bottom: 3px;
+            line-height: 1.3;
+            margin-bottom: 5px;
             font-weight: 700;
         }
         .song-reason {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-style: italic;
-            color: #555;
+            color: #4b5563;
+            line-height: 1.5;
         }
 
         .text-extra-content p {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: justify;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        
+        /* --- BOTÓN VOLVER AL MENÚ MEJORADO --- */
+        .back-button {
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+            padding: 16px 25px;
+            border: 2px solid var(--color-suave);
+            border-radius: 15px;
+            color: var(--color-principal);
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(59, 130, 246, 0.25));
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-size: 1.2rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease 0.3s forwards;
+            font-weight: 600;
+            font-family: 'Caveat', cursive;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .back-button:hover {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.25), rgba(59, 130, 246, 0.35));
+            border-color: var(--color-secundo);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            color: var(--color-principal);
+        }
+        
+        .back-button:hover::before {
+            left: 100%;
+        }
+        
+        /* --- BOTÓN SPOTIFY MEJORADO --- */
+        .spotify-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--color-suave), var(--color-principal));
+            color: white;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-top: 25px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.3);
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spotify-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .spotify-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.4);
+            background: linear-gradient(135deg, var(--color-secundo), var(--color-principal));
+        }
+        
+        .spotify-button:hover::before {
+            left: 100%;
+        }
+        
+        /* --- VISUALIZADOR DE CARTA CON IMÁGENES GRANDES --- */
+        .letter-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .letter-image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .letter-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .letter-navigation-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        
+        .letter-nav-left {
+            width: 50%;
+            height: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left: 25px;
+        }
+        
+        .letter-nav-right {
+            width: 50%;
+            height: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 25px;
+        }
+        
+        .letter-nav-arrow {
+            font-size: 3.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        
+        .letter-nav-left:hover .letter-nav-arrow,
+        .letter-nav-right:hover .letter-nav-arrow {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .letter-page-indicator {
+            position: absolute;
+            bottom: 25px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1.3rem;
+            color: var(--color-tinta);
+            background: rgba(255, 255, 255, 0.85);
+            padding: 8px 20px;
+            border-radius: 25px;
+            margin: 0 auto;
+            width: fit-content;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
         
         /* --- RESPONSIVE MOBILE --- */
@@ -261,20 +551,20 @@
             .page {
                 width: 100%;
                 height: auto;
-                padding: 20px;
+                padding: 30px 20px;
             }
             .left-page {
                 border-right: none;
-                border-bottom: 2px solid rgba(0,0,0,0.1);
+                border-bottom: 1px solid rgba(59, 130, 246, 0.2);
             }
             .menu-grid {
                 grid-template-columns: 1fr;
             }
             .menu-button {
-                height: 100px;
-                font-size: 1.2rem;
+                height: 120px;
+                font-size: 1.3rem;
             }
-            h1 { font-size: 4rem; }
+            h1 { font-size: 3.5rem; }
             h2 { font-size: 2.5rem; }
             .modal-content {
                 width: 95%;
@@ -311,10 +601,39 @@
 
     </div>
 
+    <!-- Modal para la carta con imágenes grandes -->
+    <div class="modal-overlay" id="letter-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="letter-modal-title">Nuestra Carta</span>
+                <button class="close-button" onclick="closeLetterModal()">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="letter-container">
+                    <div class="letter-image-container">
+                        <img id="current-letter-image" class="letter-image" src="" alt="Página de la carta">
+                    </div>
+                    <div class="letter-navigation-area">
+                        <div class="letter-nav-left" onclick="changeLetterPage(-1)">
+                            <div class="letter-nav-arrow">‹</div>
+                        </div>
+                        <div class="letter-nav-right" onclick="changeLetterPage(1)">
+                            <div class="letter-nav-arrow">›</div>
+                        </div>
+                    </div>
+                    <div class="letter-page-indicator" id="letter-page-indicator">Página 1 de 5</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para la checklist con PDF grande -->
     <div class="modal-overlay" id="pdf-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span id="modal-title">Documento</span>
+                <span id="modal-title">La Checklist</span>
                 <button class="close-button" onclick="closeModal()">
                     &times;
                 </button>
@@ -350,6 +669,20 @@
         const pdfModal = document.getElementById('pdf-modal');
         const pdfIframe = document.getElementById('pdf-iframe');
         const modalTitle = document.getElementById('modal-title');
+        const letterModal = document.getElementById('letter-modal');
+        const currentLetterImage = document.getElementById('current-letter-image');
+        const letterPageIndicator = document.getElementById('letter-page-indicator');
+        
+        // Variables para la navegación de la carta
+        let currentLetterPage = 1;
+        const totalLetterPages = 5;
+        const letterImages = [
+            'Carta 1.png',
+            'Carta 2.png',
+            'Carta 3.png',
+            'Carta 4.png',
+            'Carta 5.png'
+        ];
         
         // Rutas de archivos PDF - ESTAS SON LAS RUTAS CLAVE QUE DEBEN COINCIDIR CON LOS NOMBRES SUBIDOS
         const filePaths = {
@@ -360,7 +693,7 @@
         // --- DATA DE CONTENIDO (Mismo contenido de secciones) ---
         const menuHtml = `
             <div class="menu-grid">
-                <div class="menu-button" onclick="openPdf('carta', 'Nuestra Carta')">
+                <div class="menu-button" onclick="openLetter()">
                     <span class="menu-icon">💌</span>
                     <span>Abrir la Carta</span>
                 </div>
@@ -380,15 +713,15 @@
         `;
         
         const songsContent = [
-            { title: '“Ay si te pillara” – Beéle', reason: 'Porque te encanta Beéle, y cada vez que escucho esta canción me acuerdo de eso. Además, tiene como esa energía tuya, que me recuerda mucho a ti.' },
-            { title: '“La plena (W Sound 05)” – Beéle', reason: 'Porque me recuerda a tu forma de disfrutar las cosas sin darle tantas vueltas.' },
-            { title: '“Blue” – Joshua Bassett', reason: 'Porque habla de cómo alguien llega cuando menos lo esperas. “Out of the blue, I fell for you.” Y sí, fue un poco así contigo.' },
+            { title: '“Ay si te pillara” – Beéle', reason: 'Porque te encanta Beéle y cada vez que lo escucho pienso en ti.' },
+            { title: '“La plena (W Sound 05)” – Beéle', reason: 'Sinceramente, solo creo que tiene una energía como muy tú.' },
+            { title: '“Blue” – Joshua Bassett', reason: 'Porque habla de cómo alguien llega cuando menos lo esperas. "Out of the blue, I fell for you." Y sí, fue un poco así contigo.' },
             { title: '“Primeras veces” – Morat', reason: 'Porque contigo todo se siente nuevo, incluso lo de siempre. Me recuerda a ti porque haces que cualquier cosa, por mínima que sea, tenga algo especial.' },
             { title: '“Al aire” – Morat', reason: 'Porque habla de estar enamorada y no poder ocultarlo. Me recuerda a ti porque, aunque no lo diga todo, hay cosas que simplemente se notan.' },
-            { title: '“Batmovil (Remix)” – Hens, Pole, Funzo & Baby Loud', reason: 'Porque dice que si me llamas, dejo solo a “Robin” por ir contigo. Y sinceramente, no sé si hay frase que lo resuma mejor.' },
+            { title: '“Batmovil (Remix)” – Hens, Pole, Funzo & Baby Loud', reason: 'Porque dice que si me llamas, dejo solo a "Robin" por ir contigo. Y no sé si hay frase que lo resuma mejor.' },
             { title: '“Stargazing” – Myles Smith', reason: 'Porque habla de una alguien que simplemente está ahí, mirando las estrellas junto a ti. Sin más, sin líos. Solo eso, y ya es suficiente.' },
-            { title: '“Tú vas sin” – Rels B', reason: 'Porque vas a tu rollo, sin copiar a nadie. Me recuerda a ti porque eres así: auténtica, sin esforzarte en serlo.' },
-            { title: '“La vida sin ti” – Rels B', reason: 'Porque, sin querer sonar dramática, todo tiene menos sentido si no estás tú. Simple y claro.' }
+            { title: '“Tú vas sin” – Rels B', reason: 'Porque vas a tu rollo, sin seguir a nadie. Me recuerda a ti porque eres así: auténtica, sin esforzarte en serlo.' },
+            { title: '“La vida sin ti” – Rels B', reason: 'Porque, sin querer sonar dramática, todo tiene menos sentido si no estás tú.' }
         ];
 
         const meEnamoreText = `
@@ -436,10 +769,9 @@
             let titleRight = '';
 
             // Botón de Volver para las secciones que reemplazan el menú
-            const backButton = `<button class="w-full text-center text-lg mt-4 px-4 py-2 border-2 border-dashed border-gray-400 text-gray-600 hover:bg-gray-100 rounded-lg transition" onclick="showMenu()">
-                                    &#9664; Volver al Menú
-                                </button>`;
-
+            const backButton = `<div class="back-button" onclick="showMenu()">
+                                    💙 Volver al Menú
+                                </div>`;
 
             if (sectionName === 'songs') {
                 titleLeft = 'Canciones que me recuerdan a ti (I)';
@@ -449,8 +781,8 @@
                 const leftSongs = songsContent.slice(0, midPoint);
                 const rightSongs = songsContent.slice(midPoint);
 
-                const generateSongHtml = (list) => list.map(song => `
-                    <div class="song-item">
+                const generateSongHtml = (list) => list.map((song, index) => `
+                    <div class="song-item" style="animation-delay: ${index * 0.1}s">
                         <div class="song-title">${song.title}</div>
                         <div class="song-reason">${song.reason}</div>
                     </div>
@@ -464,6 +796,9 @@
                 contentHtmlRight = `
                     <div class="page-content-scroll">
                         ${generateSongHtml(rightSongs)}
+                        <a href="https://open.spotify.com/playlist/6xE8suLBPh9BV0p5UQGv4o?si=WeHvAeWPRyCxiFr9a-QW0Q&pi=c2ittQw_RuytI&pt=d17e08718f4ccda484ac133ad7123149" target="_blank" class="spotify-button">
+                            <span>🎵</span> Escuchar en Spotify
+                        </a>
                         ${backButton}
                     </div>
                 `;
@@ -497,6 +832,38 @@
             rightTitle.textContent = titleRight;
             leftPage.innerHTML = contentHtmlLeft;
             rightPage.innerHTML = contentHtmlRight;
+            
+            // Centrar el scroll al cargar la sección
+            setTimeout(() => {
+                leftPage.scrollTop = 0;
+                rightPage.scrollTop = 0;
+            }, 100);
+        }
+        
+        // --- FUNCIONES PARA LA CARTA CON IMÁGENES GRANDES ---
+        
+        function openLetter() {
+            currentLetterPage = 1;
+            updateLetterImage();
+            letterModal.style.display = 'flex';
+        }
+        
+        function closeLetterModal() {
+            letterModal.style.display = 'none';
+        }
+        
+        function changeLetterPage(direction) {
+            const newPage = currentLetterPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalLetterPages) {
+                currentLetterPage = newPage;
+                updateLetterImage();
+            }
+        }
+        
+        function updateLetterImage() {
+            currentLetterImage.src = letterImages[currentLetterPage - 1];
+            letterPageIndicator.textContent = `Página ${currentLetterPage} de ${totalLetterPages}`;
         }
         
         // --- FUNCIONES DE MODAL PDF ---
@@ -524,7 +891,7 @@
         
         // --- FUNCIÓN PRINCIPAL CORREGIDA PARA ABRIR PDF (Versión compatible con GitHub Pages) ---
         function openPdf(type, title) {
-            // Usamos los nombres de archivo simples: Carta.pdf o Checklist.pdf
+            // Usamos los nombres de archivo simples: Checklist.pdf
             const filename = filePaths[type]; 
             modalTitle.textContent = title;
             
@@ -540,7 +907,8 @@
             }
             
             if (finalPath) {
-                pdfIframe.src = finalPath;
+                // Añadimos parámetros para ajustar el zoom del PDF
+                pdfIframe.src = `${finalPath}#view=FitH`;
                 openModal();
             } else {
                 // Mensaje de fallback (solo si la lógica anterior no funciona)
@@ -558,6 +926,13 @@
         pdfModal.addEventListener('click', (e) => {
             if (e.target === pdfModal) {
                 closeModal();
+            }
+        });
+        
+        // Cierre del modal de Carta al hacer clic fuera
+        letterModal.addEventListener('click', (e) => {
+            if (e.target === letterModal) {
+                closeLetterModal();
             }
         });
         
