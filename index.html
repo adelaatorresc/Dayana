@@ -448,7 +448,7 @@
             left: 100%;
         }
         
-        /* --- VISUALIZADOR DE CARTA CON IMÁGENES RESPONSIVE --- */
+        /* --- VISUALIZADOR DE CARTA CON IMÁGENES GRANDES --- */
         .letter-container {
             width: 100%;
             height: 100%;
@@ -468,8 +468,8 @@
         }
         
         .letter-image {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -537,7 +537,7 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
         
-        /* --- MEDIA QUERIES PARA RESPONSIVE --- */
+        /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 1250px) {
             :root {
                 --album-width: 95vw;
@@ -569,45 +569,6 @@
             .modal-content {
                 width: 95%;
                 height: 95%;
-            }
-        }
-
-        /* Para tablets (iPad) */
-        @media (max-width: 1024px) and (min-width: 768px) {
-            .letter-image {
-                max-width: 85%;
-                max-height: 85%;
-            }
-            .modal-content {
-                width: 90%;
-                height: 80%;
-            }
-        }
-
-        /* Para ordenadores grandes */
-        @media (min-width: 1440px) {
-            .letter-image {
-                max-width: 80%;
-                max-height: 80%;
-            }
-            .modal-content {
-                width: 70%;
-                height: 80%;
-            }
-        }
-
-        /* Para móviles pequeños */
-        @media (max-width: 480px) {
-            .letter-image {
-                max-width: 95%;
-                max-height: 95%;
-            }
-            .letter-nav-arrow {
-                font-size: 2.5rem;
-            }
-            .letter-page-indicator {
-                font-size: 1.1rem;
-                padding: 6px 15px;
             }
         }
     </style>
@@ -644,7 +605,7 @@
     <div class="modal-overlay" id="letter-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span id="letter-modal-title">Carta</span>
+                <span id="letter-modal-title">Nuestra Carta</span>
                 <button class="close-button" onclick="closeLetterModal()">
                     &times;
                 </button>
@@ -753,15 +714,14 @@
         
         const songsContent = [
             { title: '“Ay si te pillara” – Beéle', reason: 'Porque te encanta Beéle y cada vez que lo escucho pienso en ti.' },
-            { title: '“El principio de algo” – La La Love You & Samuraï', reason: 'Porque contigo todo me va más rápido: la cabeza, el corazón… y al final siempre acabo hablando de ti sin querer. Y aunque suene un poco ñoño, es como si todo en mí te hiciera caso solo a ti..' },
+            { title: '“La plena (W Sound 05)” – Beéle', reason: 'Sinceramente, solo creo que tiene una energía como muy tú.' },
             { title: '“Blue” – Joshua Bassett', reason: 'Porque habla de cómo alguien llega cuando menos lo esperas. "Out of the blue, I fell for you." Y sí, fue un poco así contigo.' },
-            { title: '“Primeras veces” – Morat', reason: 'Amar es mucho más que enamorarse ' },
+            { title: '“Primeras veces” – Morat', reason: 'Porque contigo todo se siente nuevo, incluso lo de siempre. Me recuerda a ti porque haces que cualquier cosa, por mínima que sea, tenga algo especial.' },
             { title: '“Al aire” – Morat', reason: 'Porque habla de estar enamorada y no poder ocultarlo. Me recuerda a ti porque, aunque no lo diga todo, hay cosas que simplemente se notan.' },
             { title: '“Batmovil (Remix)” – Hens, Pole, Funzo & Baby Loud', reason: 'Porque dice que si me llamas, dejo solo a "Robin" por ir contigo. Y no sé si hay frase que lo resuma mejor.' },
             { title: '“Stargazing” – Myles Smith', reason: 'Porque habla de una alguien que simplemente está ahí, mirando las estrellas junto a ti. Sin más, sin líos. Solo eso, y ya es suficiente.' },
             { title: '“Tú vas sin” – Rels B', reason: 'Porque vas a tu rollo, sin seguir a nadie. Me recuerda a ti porque eres así: auténtica, sin esforzarte en serlo.' },
             { title: '“La vida sin ti” – Rels B', reason: 'Porque, sin querer sonar dramática, todo tiene menos sentido si no estás tú.' }
-            { title: '“Carry You Home” – Alex Warren', reason: 'Contigo tengo las ideas claras, aunque no siempre sepamos hacia dónde va todo. No quiero que lo dudes: estés como estés, yo siempre voy a intentar ser un lugar al que puedas volver. Y aunque la vida dé mil vueltas, si me toca elegir, te elijo a ti..' }
         ];
 
         const meEnamoreText = `
