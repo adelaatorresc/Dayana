@@ -448,7 +448,7 @@
             left: 100%;
         }
         
-        /* --- VISUALIZADOR DE CARTA CON IMÁGENES GRANDES --- */
+        /* --- VISUALIZADOR DE CARTA CON IMÁGENES RESPONSIVE --- */
         .letter-container {
             width: 100%;
             height: 100%;
@@ -468,8 +468,8 @@
         }
         
         .letter-image {
-            max-width: 100%;
-            max-height: 100%;
+            max-width: 90%;
+            max-height: 90%;
             object-fit: contain;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -537,7 +537,7 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
         
-        /* --- RESPONSIVE MOBILE --- */
+        /* --- MEDIA QUERIES PARA RESPONSIVE --- */
         @media (max-width: 1250px) {
             :root {
                 --album-width: 95vw;
@@ -569,6 +569,45 @@
             .modal-content {
                 width: 95%;
                 height: 95%;
+            }
+        }
+
+        /* Para tablets (iPad) */
+        @media (max-width: 1024px) and (min-width: 768px) {
+            .letter-image {
+                max-width: 85%;
+                max-height: 85%;
+            }
+            .modal-content {
+                width: 90%;
+                height: 80%;
+            }
+        }
+
+        /* Para ordenadores grandes */
+        @media (min-width: 1440px) {
+            .letter-image {
+                max-width: 80%;
+                max-height: 80%;
+            }
+            .modal-content {
+                width: 70%;
+                height: 80%;
+            }
+        }
+
+        /* Para móviles pequeños */
+        @media (max-width: 480px) {
+            .letter-image {
+                max-width: 95%;
+                max-height: 95%;
+            }
+            .letter-nav-arrow {
+                font-size: 2.5rem;
+            }
+            .letter-page-indicator {
+                font-size: 1.1rem;
+                padding: 6px 15px;
             }
         }
     </style>
